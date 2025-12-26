@@ -1,0 +1,23 @@
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { UserModule } from './user/user.module';
+import { DatabaseModule } from './shared/infrastructure/database/database.module';
+import { AuthModule } from './shared/auth/auth.module';
+import { configValidationSchema } from './shared/infrastructure/config.schema';
+
+const configModuleOptions = {
+	isGlobal: true,
+	envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
+	validationSchema: configValidationSchema,
+};
+
+@Module({
+	imports: [
+		ConfigModule.forRoot(configModuleOptions),
+		DatabaseModule,
+		
+		AuthModule,
+		UserModule,
+	]
+})
+export class AppModule {}
