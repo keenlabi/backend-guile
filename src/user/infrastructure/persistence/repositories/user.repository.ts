@@ -39,12 +39,7 @@ export class UserRepository
 
 		const savedUserModel = await this.userRepository.save(userModel);
 
-		const completeUserModel = await this.userRepository.findOne({
-			where: { id: savedUserModel.id },
-			relations: ['userRoles', 'userRoles.role'],
-		});
-
-		return this.toDomain(completeUserModel!);
+		return this.toDomain(savedUserModel);
 	}
 
 	async findByEmail(email: Email): Promise<User | null> {
