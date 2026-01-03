@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AssetModel } from 'src/asset/infrastructure/persistence/models/asset.model';
 import { ProfileModel } from 'src/user/infrastructure/persistence/models/profile.model';
 import { UserModel } from 'src/user/infrastructure/persistence/models/user.model';
+import { WalletModel } from 'src/wallet/infrastructure/persistence/models/wallet.model';
 
 @Module({
 	imports: [
@@ -21,6 +23,8 @@ import { UserModel } from 'src/user/infrastructure/persistence/models/user.model
 				entities: [
 					UserModel,
 					ProfileModel,
+					AssetModel,
+					WalletModel
 				],
 				autoLoadEntities: true,
 			}),

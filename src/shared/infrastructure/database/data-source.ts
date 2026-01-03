@@ -1,6 +1,8 @@
 import { DataSource } from 'typeorm';
 import { UserModel } from '../../../user/infrastructure/persistence/models/user.model';
 import { ProfileModel } from '../../../user/infrastructure/persistence/models/profile.model';
+import { WalletModel } from '../../../wallet/infrastructure/persistence/models/wallet.model';
+import { AssetModel } from '../../../asset/infrastructure/persistence/models/asset.model';
 
 
 export const AppDataSource = new DataSource({
@@ -15,6 +17,8 @@ export const AppDataSource = new DataSource({
 	entities: [
 		UserModel,
 		ProfileModel,
+		AssetModel,
+		WalletModel
 	],
 	migrations: ['src/shared/infrastructure/database/migrations/*.ts'],
 	migrationsTableName: 'migrations',

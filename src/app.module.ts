@@ -5,6 +5,7 @@ import { DatabaseModule } from './shared/infrastructure/database/database.module
 import { AuthModule } from './shared/auth/auth.module';
 import { configValidationSchema } from './shared/infrastructure/config.schema';
 import { WalletModule } from './wallet/wallet.module';
+import { AssetsModule } from './asset/asset.module';
 
 const configModuleOptions = {
 	isGlobal: true,
@@ -19,6 +20,7 @@ const configModuleOptions = {
 		
 		AuthModule,
 		UserModule,
+		AssetsModule,
 		WalletModule,
 	]
 })
