@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as userRepositoryInterface from '../../domain/repositories/user.repository.interface';
+import * as profileRepositoryInterface from '../../domain/repositories/profile.repository.interface'; // Import this
 import { User } from '../../domain/entities/user.entity';
+import { Profile } from '../../domain/entities/profile.entity'; // Import this
 import { Email } from '../../domain/value-objects/email';
 import { Password } from '../../domain/value-objects/password';
 import { UserAlreadyExistsError } from '../errors/user.errors';
@@ -12,6 +14,9 @@ export class RegisterUserUseCase {
 	constructor(
 		@Inject('IUserRepository')
 		private readonly userRepository: userRepositoryInterface.IUserRepository,
+        // 1. Inject Profile Repository
+		@Inject('IProfileRepository') 
+		private readonly profileRepository: profileRepositoryInterface.IProfileRepository,
 		private readonly tokenManagerService: TokenManagerService,
 	) {}
 
@@ -23,30 +28,29 @@ export class RegisterUserUseCase {
 		user: User;
 		tokens: JwtPairResponse;
 	}> {
-		// 1. Create Value Objects (Validation happens here)
 		const email = new Email(emailValue);
 		const password = await Password.fromPlainText(passwordValue);
 
-		// 2. Check existence
 		const existingUser = await this.userRepository.findByEmail(email);
 		if (existingUser) {
 			throw new UserAlreadyExistsError(emailValue);
 		}
 
-		// 3. Create Entity
+		// 2. Create User
 		const userId = this.userRepository.generateId();
-		
-		// Note: Ensure your User.create() method is updated to accept the password argument
 		const user = User.create(userId, email, password, role);
-
-		// 4. Save
 		await this.userRepository.save(user);
 
-		// 5. Issue Tokens
+		// 3. Create Empty Profile linked to User
+		const profileId = this.profileRepository.generateId();
+		const profile = Profile.createEmpty(profileId, user.id);
+		await this.profileRepository.save(profile);
+
+		// 4. Issue Tokens
 		const tokens = await this.tokenManagerService.issueTokens({
 			userId: user.id,
 			email: user.email.value,
-			role: user.role.value, // Extract string from UserRole VO
+			role: user.role.value,
 		});
 
 		return { user, tokens };

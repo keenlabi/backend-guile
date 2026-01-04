@@ -1,18 +1,18 @@
 export class Profile {
 	public readonly id: string;
 	public readonly userId: string;
-	public readonly firstName: string;
-	public readonly lastName: string;
-	public readonly username: string;
+	public readonly firstName: string | null;
+	public readonly lastName: string | null;
+	public readonly nickname: string | null;
 	public readonly createdAt?: Date;
 	public readonly updatedAt?: Date;
 
 	constructor(
 		id: string,
 		userId: string,
-		firstName: string,
-		lastName: string,
-		username: string,
+		firstName: string | null,
+		lastName: string | null,
+		nickname: string | null,
 		createdAt?: Date,
 		updatedAt?: Date,
 	) {
@@ -23,9 +23,14 @@ export class Profile {
 		this.userId = userId;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.username = username;
+		this.nickname = nickname;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
+	}
+
+	// Updated Factory for "Empty" creation
+	static createEmpty(id: string, userId: string): Profile {
+		return new Profile(id, userId, null, null, null);
 	}
 
 	static create(
@@ -33,23 +38,17 @@ export class Profile {
 		userId: string,
 		firstName: string,
 		lastName: string,
-		username: string,
+		nickname: string,
 	) {
-		return new Profile(
-			id,
-			userId,
-			firstName,
-			lastName,
-			username,
-		);
+		return new Profile(id, userId, firstName, lastName, nickname);
 	}
 
 	static fromPersistence(
 		id: string,
 		userId: string,
-		firstName: string,
-		lastName: string,
-		username: string,
+		firstName: string | null,
+		lastName: string | null,
+		nickname: string | null,
 		createdAt?: Date,
 		updatedAt?: Date,
 	) {
@@ -58,7 +57,7 @@ export class Profile {
 			userId,
 			firstName,
 			lastName,
-			username,
+			nickname,
 			createdAt,
 			updatedAt,
 		);

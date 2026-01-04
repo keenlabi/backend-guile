@@ -26,7 +26,7 @@ export class ProfileRepository implements IProfileRepository {
 	async findByUserId(userId: string): Promise<Profile | null> {
 		const model = await this.repository.findOne({
 			where: { user_id: userId },
-			relations: ['user', 'location'],
+			relations: ['user'],
 		});
 		if (!model) return null;
 		
@@ -45,13 +45,12 @@ export class ProfileRepository implements IProfileRepository {
 	}
 
 	protected toDomain(model: ProfileModel): Profile {
-		
 		return Profile.fromPersistence(
 			model.id,
 			model.user_id,
-			model.first_name,
-			model.last_name,
-			model.username,
+			model.first_name ?? null,
+			model.last_name ?? null,
+			model.nickname ?? null,
 			model.created_at,
 			model.updated_at,
 		);
@@ -61,10 +60,10 @@ export class ProfileRepository implements IProfileRepository {
 		const model = new ProfileModel();
 		model.id = entity.id;
 		model.user_id = entity.userId;
-		model.username = entity.username;
-		model.first_name = entity.firstName;
-		model.last_name = entity.lastName;
-
+		// Map nulls correctly
+		model.first_name = entity.firstName as string; 
+		model.last_name = entity.lastName as string;
+		model.nickname = entity.nickname as string;
 		return model;
 	}
 }

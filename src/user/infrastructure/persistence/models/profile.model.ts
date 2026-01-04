@@ -1,11 +1,5 @@
-import {
-	Entity,
-	PrimaryGeneratedColumn,
-	Column,
-	OneToOne,
-	JoinColumn,
-} from 'typeorm';
-import { UserModel } from './user.model';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
+import { UserModel } from "./user.model";
 
 @Entity('profiles')
 export class ProfileModel {
@@ -19,18 +13,19 @@ export class ProfileModel {
 	@JoinColumn({ name: 'user_id' })
 	user?: UserModel;
 
-	@Column({ type: 'text' })
+	@Column({ type: 'text', nullable: true })
 	first_name: string;
 
-	@Column({ type: 'text' })
+	@Column({ type: 'text', nullable: true })
 	last_name: string;
 
-	@Column({ type: 'text' })
-	username: string;
+	@Column({ type: 'text', nullable: true, name: 'nickname' }) // Rename to nickname
+  	nickname: string;
 
 	@Column({
 		name: 'date_of_birth',
 		type: 'timestamp',
+		nullable: true, // <--- Changed
 	})
 	date_of_birth: Date;
 
