@@ -8,6 +8,8 @@ import { Email } from 'src/user/domain/value-objects/email';
 import { UserStatus } from 'src/user/domain/value-objects/user-status';
 import { UserModel } from '../models/user.model';
 import { UserAlreadyExistsError } from 'src/user/application/errors/user.errors';
+import { Password } from 'src/user/domain/value-objects/password';
+import { UserRole } from 'src/user/domain/value-objects/user-role';
 
 @Injectable()
 export class UserRepository
@@ -34,6 +36,7 @@ export class UserRepository
 			id: entity.id,
 			email: entity.email.value,
 			email_verified: entity.emailVerified,
+			passwordHash: entity.passwordHash.hash,
 			status: entity.status.value,
 		});
 
@@ -62,17 +65,21 @@ export class UserRepository
 	// ===== MAPPERS =====
 	protected toDomain(model: UserModel): User {
 		const email = new Email(model.email);
-		const role = model.role;
+		const password = Password.fromHash(model.passwordHash);
 		const status = UserStatus.fromString(model.status);
+		const role = UserRole.fromString(model.role);
 
-		return User.fromPersistence(
+		const user = User.fromPersistence(
 			model.id,
 			email,
-			model.role,
+			password,
+			role,
 			status,
 			model.email_verified,
 			model.created_at,
 		);
+
+		return user;
 	}
 
 	protected toPersistence(entity: User): UserModel {
@@ -81,6 +88,8 @@ export class UserRepository
 		model.email = entity.email.value;
 		model.email_verified = entity.emailVerified;
 		model.status = entity.status.value;
+		model.role = entity.role.value;
+		model.passwordHash = entity.passwordHash.hash;
 
 		return model;
 	}

@@ -10,7 +10,7 @@ export class RegisterUserResponseDto {
 		return {
 			id: user.id,
 			email: user.email.value,
-			role: user.role,
+			role: user.role.value,
 			emailVerified: user.emailVerified,
 		};
 	}

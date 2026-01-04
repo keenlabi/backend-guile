@@ -36,7 +36,7 @@ export class AuthenticateUserUseCase {
 		const tokens = await this.tokenManagerService.issueTokens({
 			userId: user.id,
 			email: user.email.value,
-			role: user.role,
+			role: user.role.value,
 		});
 
 		return { user, tokens };

@@ -1,5 +1,11 @@
 import { DomainError } from 'src/shared/errors/domain.error';
 
+export class InvalidUserRoleError extends DomainError {
+	constructor(value: string) {
+		super(`Invalid user role: ${value}`);
+	}
+}
+
 export class UserAlreadyDeactivatedError extends DomainError {
 	constructor() {
 		super('User is already deactivated');

@@ -3,16 +3,17 @@ import { MigrationInterface, QueryRunner } from "typeorm";
 export class SeedAssets1768000000000 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
-            INSERT INTO assets (symbol, name, decimals, type, is_deposit_enabled, is_trading_enabled) VALUES
-            ('BTC', 'Bitcoin', 8, 'crypto', true, true),
-            ('ETH', 'Ethereum', 18, 'crypto', true, true),
-            ('USDT', 'Tether', 6, 'stablecoin', true, true),
-            ('USDC', 'USD Coin', 6, 'stablecoin', true, true),
-            ('SOL', 'Solana', 9, 'crypto', true, true)
+            INSERT INTO assets (symbol, name, decimals, type, is_deposit_enabled, is_trading_enabled, icon_url) VALUES
+            ('BTC', 'Bitcoin', 8, 'crypto', true, true, 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/btc.png'),
+            ('ETH', 'Ethereum', 18, 'crypto', true, true, 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/eth.png'),
+            ('USDT', 'Tether', 6, 'stablecoin', true, true, 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/usdt.png'),
+            ('USDC', 'USD Coin', 6, 'stablecoin', true, true, 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/usdc.png'),
+            ('SOL', 'Solana', 9, 'crypto', true, true, 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/sol.png')
             ON CONFLICT (symbol) DO UPDATE SET 
                 name = EXCLUDED.name,
                 decimals = EXCLUDED.decimals,
-                type = EXCLUDED.type;
+                type = EXCLUDED.type,
+                icon_url = EXCLUDED.icon_url;
         `);
     }
 

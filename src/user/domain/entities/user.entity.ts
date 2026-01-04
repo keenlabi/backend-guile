@@ -2,40 +2,43 @@ import { InvalidEmailError } from '../errors/email.errors';
 import { MissingUserIdError } from '../errors/user.errors';
 import { Email } from '../value-objects/email';
 import { Password } from '../value-objects/password';
+import { UserRole } from '../value-objects/user-role';
 import { UserStatus } from '../value-objects/user-status';
 
 export class User {
 	constructor(
 		public readonly id: string,
 		public readonly email: Email,
-		public readonly role: string,
+		public readonly passwordHash: Password,
+		public readonly role: UserRole,
 		public readonly status: UserStatus = UserStatus.ACTIVE,
 		public readonly emailVerified: boolean = false,
 		public readonly createdAt: Date = new Date(),
-		public readonly _password?: Password | null,
 	) {
 		this.validateInvariants();
 	}
 
-	get passwordHash(): string | null {
-		return this._password ? this._password.hash : null;
-	}
+	// get passwordHash(): string | null {
+	// 	return this._password ? this._password.hash : null;
+	// }
 
 	async verifyPassword(plainText: string): Promise<boolean> {
-		if (!this._password) return false;
-		return this._password.verify(plainText);
+		if (!this.passwordHash) return false;
+		return this.passwordHash.verify(plainText);
 	}
 
 	// ===== FACTORY METHODS =====
 	static create(
 		id: string,
 		email: Email,
-		role: string,
+		passwordHash: Password,
+		roleStr: string,
 		status?: UserStatus,
 		emailVerified?: boolean,
 		createdAt?: Date,
 	): User {
-		const user = new User(id, email, role, status, emailVerified, createdAt);
+		const role = UserRole.fromString(roleStr);
+		const user = new User(id, email, passwordHash, role, status, emailVerified, createdAt);
 		return user;
 	}
 
@@ -43,12 +46,13 @@ export class User {
 	static fromPersistence(
 		id: string,
 		email: Email,
-		role: string,
+		passwordHash: Password,
+		role: UserRole,
 		status: UserStatus,
 		emailVerified: boolean,
 		createdAt: Date,
 	): User {
-		return new User(id, email, role, status, emailVerified, createdAt);
+		return new User(id, email, passwordHash, role, status, emailVerified, createdAt);
 	}
 
 	// ===== PRIVATE METHODS =====x

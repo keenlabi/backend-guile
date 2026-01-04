@@ -26,7 +26,7 @@ export class FindUserGeneralProfileUseCase {
       email: user.email.value,
       emailVerified: user.emailVerified,
       status: user.status.value,
-      role: user.role,
+      role: user.role.value,
       createdAt: user.createdAt,
       
       firstName: profile?.firstName ?? null,
