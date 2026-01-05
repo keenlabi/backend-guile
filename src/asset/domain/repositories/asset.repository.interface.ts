@@ -4,4 +4,5 @@ export interface IAssetRepository {
   findAll(): Promise<Asset[]>;
   findBySymbol(symbol: string): Promise<Asset | null>;
   save(asset: Asset): Promise<Asset>;
+  createQueryBuilder(alias: string): any;
 }

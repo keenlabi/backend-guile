@@ -17,4 +17,4 @@ import { GetAllAssetsUseCase } from './application/usecases/get-all-assets.useca
   ],
   exports: ['IAssetRepository'],
 })
-export class AssetsModule {}
+export class AssetModule {}

@@ -18,19 +18,18 @@ import { CurrentUserPayload } from 'src/shared/types/express/auth';
 import { FindUserGeneralProfileUseCase } from 'src/user/application/usecases/find-user-general-profile.usecase';
 import { GetTradersUseCase } from 'src/user/application/usecases/get-traders.usecase';
 
-@Controller('users')
-export class UserController {
+@Controller('profiles')
+export class ProfileController {
 	constructor(
-		private readonly registerUserUseCase: RegisterUserUseCase,
 		private readonly findUserGeneralProfileUseCase: FindUserGeneralProfileUseCase,
 		private readonly getTradersUseCase: GetTradersUseCase,
-		private readonly cookieUtils: CookieUtils,
 	) {}
 
 	@Get('traders')
 	@UseGuards(JwtAuthGuard)
 	async getTraders() {
-		return await this.getTradersUseCase.execute();
+		const data = await this.getTradersUseCase.execute();
+		return data;
 	}
 
 	@Get('me')
@@ -39,39 +38,6 @@ export class UserController {
 	async getProfile(@Req() req: express.Request) {
 		return {
 			profile: await this.findUserGeneralProfileUseCase.execute((req.user as CurrentUserPayload).userId),
-		};
-	}
-
-	@Post('register')
-	@HttpCode(HttpStatus.CREATED)
-	async register(
-		@Body() dto: RegisterUserRequestDto,
-		@Res({ passthrough: true }) res: express.Response,
-	) {
-		const result = await this.registerUserUseCase.execute(
-			dto.email,
-			dto.password
-		);
-
-		const user = result.user;
-		res.cookie(
-			'accessToken',
-			result.tokens.accessToken,
-			this.cookieUtils.getAccessTokenOptions(),
-		);
-		res.cookie(
-			'refreshToken',
-			result.tokens.refreshToken,
-			this.cookieUtils.getRefreshTokenOptions(),
-		);
-
-		return {
-			user: {
-				id: user.id,
-				email: user.email.value,
-				role: user.role,
-				emailVerified: user.emailVerified,
-			},
 		};
 	}
 }

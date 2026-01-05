@@ -5,6 +5,9 @@ import { Profile } from '../../../domain/entities/profile.entity';
 import { IProfileRepository } from '../../../domain/repositories/profile.repository.interface';
 import { v4 as uuidv4 } from 'uuid';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/user/domain/entities/user.entity';
+import { UserRole } from 'src/user/domain/value-objects/user-role';
+import { UserRoleType } from 'src/user/domain/enums/user-role.enum';
 
 @Injectable()
 export class ProfileRepository implements IProfileRepository {
@@ -12,6 +15,22 @@ export class ProfileRepository implements IProfileRepository {
 		@InjectRepository(ProfileModel)
 		private readonly repository: Repository<ProfileModel>,
 	) {}
+
+	async findAllTraders(): Promise<Profile[]> {
+		const profiles = await this.repository.find({
+			relations: ['user'], // Perform the JOIN
+			where: {
+				user: {
+				role: UserRoleType.TRADER as any, // Filter on the joined table
+				},
+			},
+			order: {
+				created_at: 'DESC',
+			},
+		});
+
+		return profiles.map((model) => this.toDomain(model));
+	}
 
 	generateId(): string {
 		return uuidv4();
@@ -45,14 +64,28 @@ export class ProfileRepository implements IProfileRepository {
 	}
 
 	protected toDomain(model: ProfileModel): Profile {
+		let userDomain: User | null = null;
+
+		if (model.user) {
+			userDomain = {
+				id: model.user.id,
+				email: model.user.email,
+				role: model.user.role,
+				status: model.user.status,
+				email_verified: model.user.email_verified,
+				createdAt: model.user.created_at
+			} as any;
+		}
+
 		return Profile.fromPersistence(
 			model.id,
 			model.user_id,
-			model.first_name ?? null,
-			model.last_name ?? null,
-			model.nickname ?? null,
+			model.first_name,
+			model.last_name,
+			model.nickname,
 			model.created_at,
 			model.updated_at,
+			userDomain
 		);
 	}
 

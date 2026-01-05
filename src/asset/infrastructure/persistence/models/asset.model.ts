@@ -2,6 +2,9 @@ import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } fro
 
 @Entity('assets')
 export class AssetModel {
+  @PrimaryColumn('uuid')
+  id: string;
+
   @PrimaryColumn()
   symbol: string;
 
@@ -29,6 +32,9 @@ export class AssetModel {
 
   @Column({ name: 'icon_url', nullable: true })
   icon_url: string;
+  
+  @Column({ name: 'deposit_address', nullable: true })
+  deposit_address: string;
 
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;

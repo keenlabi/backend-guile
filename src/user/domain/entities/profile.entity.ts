@@ -1,3 +1,5 @@
+import { User } from "./user.entity";
+
 export class Profile {
 	public readonly id: string;
 	public readonly userId: string;
@@ -6,6 +8,7 @@ export class Profile {
 	public readonly nickname: string | null;
 	public readonly createdAt?: Date;
 	public readonly updatedAt?: Date;
+	public readonly user?: User | null;
 
 	constructor(
 		id: string,
@@ -15,6 +18,7 @@ export class Profile {
 		nickname: string | null,
 		createdAt?: Date,
 		updatedAt?: Date,
+		user?: User | null,
 	) {
 		if (!id) throw new Error('Profile id is required');
 		if (!userId) throw new Error('userId is required');
@@ -26,6 +30,7 @@ export class Profile {
 		this.nickname = nickname;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
+		this.user = user;
 	}
 
 	// Updated Factory for "Empty" creation
@@ -51,6 +56,7 @@ export class Profile {
 		nickname: string | null,
 		createdAt?: Date,
 		updatedAt?: Date,
+		user?: User | null,
 	) {
 		return new Profile(
 			id,
@@ -60,6 +66,7 @@ export class Profile {
 			nickname,
 			createdAt,
 			updatedAt,
+			user
 		);
 	}
 }

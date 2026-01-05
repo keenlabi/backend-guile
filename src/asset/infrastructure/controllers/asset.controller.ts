@@ -17,6 +17,8 @@ export class AssetController {
         decimals: asset.decimals,
         isDepositEnabled: asset.isDepositEnabled,
         isTradingEnabled: asset.isTradingEnabled,
+        iconUrl: asset.iconUrl,
+        depositAddress: asset.depositAddress, // Now sending this to client
       })),
     };
   }

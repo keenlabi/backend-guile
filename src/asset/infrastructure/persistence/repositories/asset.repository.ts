@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { AssetModel } from '../models/asset.model';
 import { IAssetRepository } from 'src/asset/domain/repositories/asset.repository.interface';
 import { Asset } from 'src/asset/domain/entities/asset.entity';
@@ -31,6 +31,7 @@ export class AssetRepository implements IAssetRepository {
 
   private toDomain(model: AssetModel): Asset {
     return Asset.fromPersistence(
+      model.id,
       model.symbol,
       model.name,
       model.decimals,
@@ -39,6 +40,7 @@ export class AssetRepository implements IAssetRepository {
       model.is_withdrawal_enabled,
       model.is_trading_enabled,
       model.icon_url,
+      model.deposit_address, // Map from model
       model.created_at,
       model.updated_at,
     );
@@ -54,6 +56,11 @@ export class AssetRepository implements IAssetRepository {
     model.is_withdrawal_enabled = entity.isWithdrawalEnabled;
     model.is_trading_enabled = entity.isTradingEnabled;
     model.icon_url = entity.iconUrl ?? ""; // Fallback or handle null properly in strict mode
+    model.deposit_address = entity.depositAddress ?? "";
     return model;
+  }
+
+  createQueryBuilder(alias: string): SelectQueryBuilder<AssetModel> {
+    return this.repository.createQueryBuilder(alias);
   }
 }

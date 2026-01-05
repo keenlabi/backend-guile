@@ -6,8 +6,7 @@ import { WalletRepository } from './infrastructure/persistence/repositories/wall
 import { GetMyWalletUseCase } from './application/usecases/get-my-wallet.usecase';
 import { DepositFundsUseCase } from './application/usecases/deposit-funds.usecase';
 import { TokenModule } from 'src/shared/auth/token.module';
-import { ProfileModel } from 'src/user/infrastructure/persistence/models/profile.model';
-import { UserModel } from 'src/user/infrastructure/persistence/models/user.model';
+import { AssetModule } from 'src/asset/asset.module';
 
 @Module({
   imports: [
@@ -15,6 +14,7 @@ import { UserModel } from 'src/user/infrastructure/persistence/models/user.model
       WalletModel
     ]),
     TokenModule,
+    AssetModule
   ],
   controllers: [WalletController],
   providers: [

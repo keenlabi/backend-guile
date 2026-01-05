@@ -11,11 +11,11 @@ export class DepositFundsUseCase {
     private readonly getMyWalletUseCase: GetMyWalletUseCase,
   ) {}
 
-  async execute(userId: string, amount: number): Promise<Wallet> {
-    const wallet = await this.getMyWalletUseCase.execute(userId);
+  async execute(userId: string, amount: number) {
+     await this.getMyWalletUseCase.execute(userId);
     
-    wallet.deposit(amount);
+    // wallet.deposit(amount);
     
-    return await this.walletRepository.save(wallet);
+    // return await this.walletRepository.save(wallet);
   }
 }
