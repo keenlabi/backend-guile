@@ -15,15 +15,19 @@ export class TransactionRepository extends BaseRepository<Transaction, Transacti
     super(repository);
   }
 
-  protected toDomain(model: TransactionModel): Transaction {
+protected toDomain(model: TransactionModel): Transaction {
     return new Transaction(
       model.id,
       model.user_id,
-      model.type as 'CREDIT' | 'DEBIT',
+      model.type, // Enum handles mapping automatically if types match
       model.symbol,
       Number(model.amount_usd),
       Number(model.token_amount),
       Number(model.rate_at_time),
+      model.status,
+      model.tx_hash,
+      model.sender_address,
+      model.network,
       model.created_at,
     );
   }
@@ -37,6 +41,10 @@ export class TransactionRepository extends BaseRepository<Transaction, Transacti
     model.amount_usd = entity.amountUsd;
     model.token_amount = entity.tokenAmount;
     model.rate_at_time = entity.rateAtTime;
+    model.status = entity.status;
+    model.tx_hash = entity.txHash || "";
+    model.sender_address = entity.senderAddress || "";
+    model.network = entity.network || "";
     return model;
   }
 }

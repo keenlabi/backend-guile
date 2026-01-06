@@ -1,5 +1,11 @@
 import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
+export enum AssetType {
+  CRYPTO = 'crypto',
+  STABLECOIN = 'stablecoin',
+  COMMODITY = 'commodity'
+}
+
 @Entity('assets')
 export class AssetModel {
   @PrimaryColumn('uuid')
@@ -16,10 +22,10 @@ export class AssetModel {
 
   @Column({ 
     type: 'enum', 
-    enum: ['crypto', 'fiat', 'stablecoin'], 
-    default: 'crypto' 
+    enum: AssetType, 
+    default: AssetType.CRYPTO 
   })
-  type: string;
+  type: AssetType;
 
   @Column({ name: 'is_deposit_enabled', default: true })
   is_deposit_enabled: boolean;

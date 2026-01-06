@@ -6,14 +6,15 @@ export class Wallet {
   constructor(
     public readonly id: string,
     public readonly userId: string,
-    public balance: number,
-    public assets: Record<string, WalletAsset>, // Key is the Symbol (e.g. "BTC")
-    public readonly createdAt?: Date,
-    public readonly updatedAt?: Date,
+    public balance: number, // USD Fiat Balance (The "Base")
+    public assets: Record<string, WalletAsset>, // Crypto Holdings
+    public readonly createdAt: Date = new Date(),
+    public readonly updatedAt: Date = new Date(),
   ) {}
 
-  static create(id: string, userId: string, initialAssets: Record<string, WalletAsset>): Wallet {
-    return new Wallet(id, userId, 0, initialAssets, new Date(), new Date());
+  // SIMPLIFIED: No need to pass initialAssets. Start with empty object.
+  static create(id: string, userId: string): Wallet {
+    return new Wallet(id, userId, 0, {}, new Date(), new Date());
   }
 
   static fromPersistence(

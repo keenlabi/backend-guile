@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString, IsUUID, Min } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class AdminWalletActionDto {
@@ -8,10 +8,23 @@ export class AdminWalletActionDto {
 
   @IsString()
   @IsNotEmpty()
-  symbol: string;
+  symbol: string; // e.g., 'BTC'
 
   @IsNumber()
-  @Min(0.01)
+  @Min(0.00000001)
   @Type(() => Number)
-  amountUsd: number;
+  amount: number; // e.g., 1.5 (BTC)
+
+  // Optional: For manually recording blockchain details
+  @IsOptional()
+  @IsString()
+  txHash?: string;
+
+  @IsOptional()
+  @IsString()
+  senderAddress?: string;
+
+  @IsOptional()
+  @IsString()
+  network?: string;
 }

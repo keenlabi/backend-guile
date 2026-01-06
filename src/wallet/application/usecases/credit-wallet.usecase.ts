@@ -2,7 +2,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import * as walletRepositoryInterface from '../../domain/repositories/wallet.repository.interface';
 import * as transactionRepositoryInterface from '../../domain/repositories/transaction.repository.interface';
 import { CryptoRateService } from '../../infrastructure/services/crypto-rate.service';
-import { Transaction } from '../../domain/entities/transaction.entity';
+import { Transaction, TransactionStatus, TransactionType } from '../../domain/entities/transaction.entity';
 import { Wallet } from '../../domain/entities/wallet.entity';
 import * as userRepositoryInterface from 'src/user/domain/repositories/user.repository.interface';
 
@@ -15,43 +15,54 @@ export class CreditWalletUseCase {
     private readonly cryptoRateService: CryptoRateService,
   ) {}
 
-  async execute(userId: string, symbol: string, amountUsd: number) {
-    // 1. Validate User
+  async execute(
+    userId: string, 
+    symbol: string, 
+    amount: number, // Token Amount (e.g. 1.5 BTC)
+    // Optional "Evidence" to make it look real
+    txHash?: string, 
+    senderAddress?: string, 
+    network?: string
+  ) {
+    // 1. Validate User & Wallet
     const user = await this.userRepository.findById(userId);
     if (!user) throw new NotFoundException('User not found');
 
-    // 2. Get Wallet (Create if missing - similar logic to GetMyWallet)
     let wallet = await this.walletRepository.findByUserId(userId);
     if (!wallet) {
-      // Create empty wallet if it doesn't exist
-      wallet = Wallet.create(this.walletRepository.generateId(), userId, {});
+      wallet = Wallet.create(this.walletRepository.generateId(), userId);
     }
 
-    // 3. Get Rate and Calculate Tokens
-    const rate = await this.cryptoRateService.getRateInUsd(symbol);
-    const tokenAmount = amountUsd / rate;
+    const cleanSymbol = symbol.toUpperCase();
+    let amountToAddInUsd = 0;
+    let rate = 1;
 
-    // 4. Update Wallet Balance
-    const currentAsset = wallet.assets[symbol] || { balance: 0 };
-    const newBalance = Number(currentAsset.balance) + tokenAmount;
+    // 2. Calculate USD Value (Auto-Liquidation)
+    if (['USD', 'USDT', 'USDC'].includes(cleanSymbol)) {
+        amountToAddInUsd = amount;
+    } else {
+        rate = await this.cryptoRateService.getRateInUsd(cleanSymbol);
+        amountToAddInUsd = amount * rate;
+    }
 
-    // We must re-assign the object for TypeORM to detect the JSONB change
-    wallet.assets = {
-      ...wallet.assets,
-      [symbol]: { balance: newBalance },
-    };
-
+    // 3. Update Balance (Always USD)
+    wallet.balance = Number(wallet.balance) + amountToAddInUsd;
     await this.walletRepository.save(wallet);
 
-    // 5. Create Audit Record
+    // 4. Create "DEPOSIT" Record
+    // This looks exactly like a blockchain event to the user
     const transaction = Transaction.create(
       this.transactionRepository.generateId(),
       userId,
-      'CREDIT',
-      symbol,
-      amountUsd,
-      tokenAmount,
+      TransactionType.DEPOSIT, // <--- The key: It says "DEPOSIT"
+      cleanSymbol,
+      amountToAddInUsd,
+      amount,
       rate,
+      TransactionStatus.COMPLETED,
+      txHash,        // If admin provides this, it looks 100% real
+      senderAddress,
+      network
     );
 
     await this.transactionRepository.save(transaction);
@@ -59,10 +70,11 @@ export class CreditWalletUseCase {
     return {
       success: true,
       data: {
-        symbol,
-        creditedAmount: tokenAmount,
-        newBalance,
-        rateUsed: rate
+        type: 'DEPOSIT',
+        symbol: cleanSymbol,
+        amount: amount,
+        valueUsd: amountToAddInUsd,
+        txHash: txHash || null
       }
     };
   }

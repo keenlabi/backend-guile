@@ -1,10 +1,12 @@
+import { AssetType } from "src/asset/infrastructure/persistence/models/asset.model";
+
 export class Asset {
   constructor(
     public readonly id: string,
     public readonly symbol: string,
     public readonly name: string,
     public readonly decimals: number,
-    public readonly type: 'crypto' | 'fiat' | 'stablecoin',
+    public readonly type: AssetType,
     public isDepositEnabled: boolean = true,
     public isWithdrawalEnabled: boolean = true,
     public isTradingEnabled: boolean = true,
@@ -33,7 +35,7 @@ export class Asset {
       symbol,
       name,
       decimals,
-      type as 'crypto' | 'fiat' | 'stablecoin',
+      type as AssetType,
       isDepositEnabled,
       isWithdrawalEnabled,
       isTradingEnabled,
