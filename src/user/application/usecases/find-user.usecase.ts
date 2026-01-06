@@ -5,7 +5,7 @@ import { UserNotFoundError } from '../errors/user.errors';
 import { UserGeneralProfileDto } from '../dtos/user-general-profile.dto';
 
 @Injectable()
-export class FindUserGeneralProfileUseCase {
+export class FindUserUseCase {
   constructor(
     @Inject('IUserRepository')
     private readonly userRepository: userRepositoryInterface.IUserRepository,

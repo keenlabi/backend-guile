@@ -15,14 +15,14 @@ import express from 'express';
 import { CookieUtils } from '../../../shared/auth/infrastructure/utils/cookie.utils';
 import { JwtAuthGuard } from 'src/shared/auth/infrastructure/guards/jwt-auth.guard';
 import { CurrentUserPayload } from 'src/shared/types/express/auth';
-import { FindUserGeneralProfileUseCase } from 'src/user/application/usecases/find-user-general-profile.usecase';
+import { FindUserUseCase } from 'src/user/application/usecases/find-user.usecase';
 import { GetTradersUseCase } from 'src/user/application/usecases/get-traders.usecase';
 
 @Controller('users')
 export class UserController {
 	constructor(
 		private readonly registerUserUseCase: RegisterUserUseCase,
-		private readonly findUserGeneralProfileUseCase: FindUserGeneralProfileUseCase,
+		private readonly findUserUseCase: FindUserUseCase,
 		private readonly getTradersUseCase: GetTradersUseCase,
 		private readonly cookieUtils: CookieUtils,
 	) {}
@@ -37,9 +37,8 @@ export class UserController {
 	@UseGuards(JwtAuthGuard)
 	@HttpCode(HttpStatus.OK)
 	async getProfile(@Req() req: express.Request) {
-		return {
-			profile: await this.findUserGeneralProfileUseCase.execute((req.user as CurrentUserPayload).userId),
-		};
+		const user = await this.findUserUseCase.execute((req.user as CurrentUserPayload).userId);
+		return user;
 	}
 
 	@Post('register')

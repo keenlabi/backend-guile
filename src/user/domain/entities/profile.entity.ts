@@ -1,4 +1,11 @@
-import { User } from "./user.entity";
+export class ProfileUser {
+	email: string;
+	passwordHash: string;
+	role: string;
+	status: string;
+	emailVerified: boolean;
+	createdAt: Date;
+}
 
 export class Profile {
 	public readonly id: string;
@@ -8,7 +15,7 @@ export class Profile {
 	public readonly nickname: string | null;
 	public readonly createdAt?: Date;
 	public readonly updatedAt?: Date;
-	public readonly user?: User | null;
+	public readonly user?: ProfileUser | null;
 
 	constructor(
 		id: string,
@@ -18,7 +25,7 @@ export class Profile {
 		nickname: string | null,
 		createdAt?: Date,
 		updatedAt?: Date,
-		user?: User | null,
+		user?: ProfileUser | null,
 	) {
 		if (!id) throw new Error('Profile id is required');
 		if (!userId) throw new Error('userId is required');
@@ -56,7 +63,7 @@ export class Profile {
 		nickname: string | null,
 		createdAt?: Date,
 		updatedAt?: Date,
-		user?: User | null,
+		user?: ProfileUser | null,
 	) {
 		return new Profile(
 			id,

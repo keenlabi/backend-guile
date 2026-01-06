@@ -7,9 +7,10 @@ import { UserController } from './infrastructure/controllers/user.controller';
 import { TokenModule } from 'src/shared/auth/token.module';
 import { ProfileRepository } from './infrastructure/persistence/repositories/profile.repository';
 import { ProfileModel } from './infrastructure/persistence/models/profile.model';
-import { FindUserGeneralProfileUseCase } from './application/usecases/find-user-general-profile.usecase';
+import { FindUserUseCase } from './application/usecases/find-user.usecase';
 import { GetTradersUseCase } from './application/usecases/get-traders.usecase';
 import { ProfileController } from './infrastructure/controllers/profile.controller';
+import { FindUserProfileUseCase } from './application/usecases/find-user-profile.usecase';
 
 @Module({
 	imports: [
@@ -34,7 +35,8 @@ import { ProfileController } from './infrastructure/controllers/profile.controll
 
 		// Use Cases
 		RegisterUserUseCase,
-		FindUserGeneralProfileUseCase,
+		FindUserProfileUseCase,
+		FindUserUseCase,
 		GetTradersUseCase
 	],
 	exports: [

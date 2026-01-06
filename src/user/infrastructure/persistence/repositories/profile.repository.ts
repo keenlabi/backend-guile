@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { ProfileModel } from '../models/profile.model';
-import { Profile } from '../../../domain/entities/profile.entity';
+import { Profile, ProfileUser } from '../../../domain/entities/profile.entity';
 import { IProfileRepository } from '../../../domain/repositories/profile.repository.interface';
 import { v4 as uuidv4 } from 'uuid';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/user/domain/entities/user.entity';
-import { UserRole } from 'src/user/domain/value-objects/user-role';
 import { UserRoleType } from 'src/user/domain/enums/user-role.enum';
 
 @Injectable()
@@ -48,7 +46,6 @@ export class ProfileRepository implements IProfileRepository {
 			relations: ['user'],
 		});
 		if (!model) return null;
-		
 		return this.toDomain(model);
 	}
 
@@ -64,7 +61,7 @@ export class ProfileRepository implements IProfileRepository {
 	}
 
 	protected toDomain(model: ProfileModel): Profile {
-		let userDomain: User | null = null;
+		let userDomain: ProfileUser | null = null;
 
 		if (model.user) {
 			userDomain = {

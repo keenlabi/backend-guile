@@ -1,27 +1,22 @@
 import {
 	Controller,
-	Post,
-	Body,
 	HttpCode,
 	HttpStatus,
-	Res,
 	Req,
 	UseGuards,
 	Get,
+	Param,
 } from '@nestjs/common';
-import { RegisterUserUseCase } from '../../application/usecases/register-user.usecase';
-import { RegisterUserRequestDto } from './dtos/register-user-request.dto';
 import express from 'express';
-import { CookieUtils } from '../../../shared/auth/infrastructure/utils/cookie.utils';
 import { JwtAuthGuard } from 'src/shared/auth/infrastructure/guards/jwt-auth.guard';
 import { CurrentUserPayload } from 'src/shared/types/express/auth';
-import { FindUserGeneralProfileUseCase } from 'src/user/application/usecases/find-user-general-profile.usecase';
 import { GetTradersUseCase } from 'src/user/application/usecases/get-traders.usecase';
+import { FindUserProfileUseCase } from 'src/user/application/usecases/find-user-profile.usecase';
 
 @Controller('profiles')
 export class ProfileController {
 	constructor(
-		private readonly findUserGeneralProfileUseCase: FindUserGeneralProfileUseCase,
+		private readonly findUserProfileUseCase: FindUserProfileUseCase,
 		private readonly getTradersUseCase: GetTradersUseCase,
 	) {}
 
@@ -37,7 +32,13 @@ export class ProfileController {
 	@HttpCode(HttpStatus.OK)
 	async getProfile(@Req() req: express.Request) {
 		return {
-			profile: await this.findUserGeneralProfileUseCase.execute((req.user as CurrentUserPayload).userId),
+			profile: await this.findUserProfileUseCase.execute((req.user as CurrentUserPayload).userId),
 		};
+	}
+
+	@Get(':userId')
+	@UseGuards(JwtAuthGuard)
+	async getUserProfile(@Param('userId') userId: string) {
+		return await this.findUserProfileUseCase.execute(userId);
 	}
 }
