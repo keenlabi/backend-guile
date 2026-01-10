@@ -18,13 +18,6 @@ export class WalletModel {
   })
   balance: number; // USD Fiat Balance
 
-  @Column({ 
-    type: 'jsonb', 
-    default: {},
-    comment: 'Structure: { "BTC": { "balance": 0.5 } }' 
-  })
-  assets: Record<string, { balance: number }>;
-
   @Column({ type: 'uuid' })
   user_id: string;
 

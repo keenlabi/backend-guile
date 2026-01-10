@@ -16,6 +16,9 @@ import { DebitWalletUseCase } from './application/usecases/debit-wallet.usecase'
 import { CryptoRateService } from './infrastructure/services/crypto-rate.service';
 import { TransactionRepository } from './infrastructure/persistence/repositories/transaction.repository';
 import { MarketModule } from 'src/market/market.module';
+import { GetPendingWithdrawalsUseCase } from './application/usecases/get-pending-withdrawals.usecase';
+import { ProcessWithdrawalUseCase } from './application/usecases/process-withdrawal.usecase';
+import { GetMyTransactionsUseCase } from './application/usecases/get-my-transactions.usecase';
 
 @Module({
   imports: [
@@ -39,6 +42,9 @@ import { MarketModule } from 'src/market/market.module';
     DepositFundsUseCase,
     CreditWalletUseCase,
     DebitWalletUseCase,
+    GetPendingWithdrawalsUseCase,
+    ProcessWithdrawalUseCase,
+    GetMyTransactionsUseCase,
 
     {
       provide: 'IWalletRepository',

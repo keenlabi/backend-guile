@@ -36,7 +36,6 @@ export class WalletRepository extends BaseRepository<Wallet, WalletModel> implem
       model.id,
       model.user_id,
       Number(model.balance),
-      model.assets,
       model.created_at,
       model.updated_at,
     );
@@ -47,7 +46,6 @@ export class WalletRepository extends BaseRepository<Wallet, WalletModel> implem
     model.id = entity.id;
     model.user_id = entity.userId;
     model.balance = entity.balance;
-    model.assets = entity.assets;
     return model;
   }
 }

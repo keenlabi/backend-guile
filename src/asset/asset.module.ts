@@ -5,7 +5,6 @@ import { AssetController } from './infrastructure/controllers/asset.controller';
 import { AssetRepository } from './infrastructure/persistence/repositories/asset.repository';
 import { GetAllAssetsUseCase } from './application/usecases/get-all-assets.usecase';
 import { MarketController } from './infrastructure/controllers/market.controller';
-import { WalletModule } from 'src/wallet/wallet.module';
 import { GetAssetChartUseCase } from './application/usecases/get-asset-chart.usecase';
 import { MarketModule } from 'src/market/market.module';
 

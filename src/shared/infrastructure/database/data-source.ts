@@ -4,6 +4,8 @@ import { ProfileModel } from '../../../user/infrastructure/persistence/models/pr
 import { WalletModel } from '../../../wallet/infrastructure/persistence/models/wallet.model';
 import { AssetModel } from '../../../asset/infrastructure/persistence/models/asset.model';
 import { TransactionModel } from '../../../wallet/infrastructure/persistence/models/transaction.model';
+import { OrderModel } from '../../../order/infrastructure/models/order.model';
+import { PredictionModel } from '../../../prediction/infrastructure/persistence/models/prediction.model';
 
 
 export const AppDataSource = new DataSource({
@@ -20,7 +22,9 @@ export const AppDataSource = new DataSource({
 		ProfileModel,
 		AssetModel,
 		WalletModel,
-		TransactionModel
+		TransactionModel,
+		OrderModel,
+		PredictionModel
 	],
 	migrations: ['src/shared/infrastructure/database/migrations/*.ts'],
 	migrationsTableName: 'migrations',

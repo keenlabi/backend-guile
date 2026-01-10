@@ -16,5 +16,4 @@ export interface JoinedAsset {
 export interface WalletResponse {
   id: string;
   usdBalance: number;
-  assets: JoinedAsset[];
 }

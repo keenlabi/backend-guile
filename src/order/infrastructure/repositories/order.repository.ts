@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderModel } from '../models/order.model';
-import { Order, OrderSide, OrderStatus } from '../../../domain/entities/order.entity';
+import { Order, OrderSide, OrderStatus } from '../../../wallet/domain/entities/order.entity';
 import { BaseRepository } from 'src/shared/infrastructure/persistence/base.repository';
 
 @Injectable()

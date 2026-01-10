@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TransactionModel } from '../models/transaction.model';
 import { ITransactionRepository } from '../../../domain/repositories/transaction.repository.interface';
-import { Transaction } from '../../../domain/entities/transaction.entity';
+import { Transaction, TransactionStatus, TransactionType } from '../../../domain/entities/transaction.entity';
 import { BaseRepository } from 'src/shared/infrastructure/persistence/base.repository';
 
 @Injectable()
@@ -13,6 +13,27 @@ export class TransactionRepository extends BaseRepository<Transaction, Transacti
     readonly repository: Repository<TransactionModel>,
   ) {
     super(repository);
+  }
+
+  async findByUserId(userId: string): Promise<Transaction[]> {
+    const models = await this.repository.find({
+      where: { user_id: userId },
+      order: { created_at: 'DESC' }
+    });
+    return models.map(this.toDomain);
+  }
+
+  async findPendingWithdrawals(): Promise<Transaction[]> {
+    const models = await this.repository.find({
+      where: {
+        type: TransactionType.WITHDRAWAL,
+        status: TransactionStatus.PENDING,
+      },
+      order: { created_at: 'DESC' },
+      relations: ['user'], // We load the User relationship here so the Admin knows who to pay
+    });
+
+    return models.map(this.toDomain);
   }
 
 protected toDomain(model: TransactionModel): Transaction {

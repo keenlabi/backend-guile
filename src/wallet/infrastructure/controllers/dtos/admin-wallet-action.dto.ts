@@ -13,7 +13,7 @@ export class AdminWalletActionDto {
   @IsNumber()
   @Min(0.00000001)
   @Type(() => Number)
-  amount: number; // e.g., 1.5 (BTC)
+  amountUsd: number; // e.g., 1.5 (BTC)
 
   // Optional: For manually recording blockchain details
   @IsOptional()
@@ -23,6 +23,10 @@ export class AdminWalletActionDto {
   @IsOptional()
   @IsString()
   senderAddress?: string;
+
+  @IsOptional()
+  @IsString()
+  recipientAddress?: string;
 
   @IsOptional()
   @IsString()

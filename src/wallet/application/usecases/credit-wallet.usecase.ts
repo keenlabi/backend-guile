@@ -19,15 +19,15 @@ export class CreditWalletUseCase {
     userId: string, 
     symbol: string, 
     amount: number, // Token Amount (e.g. 1.5 BTC)
-    // Optional "Evidence" to make it look real
     txHash?: string, 
     senderAddress?: string, 
     network?: string
   ) {
-    // 1. Validate User & Wallet
+    // 1. Validate User
     const user = await this.userRepository.findById(userId);
     if (!user) throw new NotFoundException('User not found');
 
+    // 2. Get or Create Wallet
     let wallet = await this.walletRepository.findByUserId(userId);
     if (!wallet) {
       wallet = Wallet.create(this.walletRepository.generateId(), userId);
@@ -37,7 +37,7 @@ export class CreditWalletUseCase {
     let amountToAddInUsd = 0;
     let rate = 1;
 
-    // 2. Calculate USD Value (Auto-Liquidation)
+    // 3. Calculate USD Value
     if (['USD', 'USDT', 'USDC'].includes(cleanSymbol)) {
         amountToAddInUsd = amount;
     } else {
@@ -45,22 +45,22 @@ export class CreditWalletUseCase {
         amountToAddInUsd = amount * rate;
     }
 
-    // 3. Update Balance (Always USD)
+    // 4. Update Wallet Balance (USD Only)
     wallet.balance = Number(wallet.balance) + amountToAddInUsd;
     await this.walletRepository.save(wallet);
 
-    // 4. Create "DEPOSIT" Record
-    // This looks exactly like a blockchain event to the user
+    // 5. Create Audit Record
+    // We still record that "1.5 BTC" was deposited, even though the wallet holds USD now.
     const transaction = Transaction.create(
       this.transactionRepository.generateId(),
       userId,
-      TransactionType.DEPOSIT, // <--- The key: It says "DEPOSIT"
+      TransactionType.DEPOSIT,
       cleanSymbol,
-      amountToAddInUsd,
-      amount,
+      amountToAddInUsd, // $75,000
+      amount,           // 1.5 BTC
       rate,
       TransactionStatus.COMPLETED,
-      txHash,        // If admin provides this, it looks 100% real
+      txHash,
       senderAddress,
       network
     );
@@ -74,6 +74,7 @@ export class CreditWalletUseCase {
         symbol: cleanSymbol,
         amount: amount,
         valueUsd: amountToAddInUsd,
+        newBalance: wallet.balance,
         txHash: txHash || null
       }
     };

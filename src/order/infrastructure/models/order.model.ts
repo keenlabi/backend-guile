@@ -1,6 +1,6 @@
 import { Entity, PrimaryColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { UserModel } from '../../../../user/infrastructure/persistence/models/user.model';
-import { OrderSide, OrderStatus } from '../../../domain/entities/order.entity';
+import { UserModel } from '../../../user/infrastructure/persistence/models/user.model';
+import { OrderSide, OrderStatus } from '../../../wallet/domain/entities/order.entity';
 
 @Entity('orders')
 export class OrderModel {

@@ -7,6 +7,8 @@ import { configValidationSchema } from './shared/infrastructure/config.schema';
 import { WalletModule } from './wallet/wallet.module';
 import { AssetModule } from './asset/asset.module';
 import { MarketModule } from './market/market.module';
+import { OrderModule } from './order/order.module';
+import { PredictionModule } from './prediction/prediction.module';
 
 const configModuleOptions = {
 	isGlobal: true,
@@ -23,7 +25,9 @@ const configModuleOptions = {
 		UserModule,
 		AssetModule,
 		WalletModule,
-		MarketModule
+		MarketModule,
+		OrderModule,
+		PredictionModule
 	]
 })
 export class AppModule {}

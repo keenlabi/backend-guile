@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AssetModel } from 'src/asset/infrastructure/persistence/models/asset.model';
+import { OrderModel } from 'src/order/infrastructure/models/order.model';
+import { PredictionModel } from 'src/prediction/infrastructure/persistence/models/prediction.model';
 import { ProfileModel } from 'src/user/infrastructure/persistence/models/profile.model';
 import { UserModel } from 'src/user/infrastructure/persistence/models/user.model';
 import { WalletModel } from 'src/wallet/infrastructure/persistence/models/wallet.model';
@@ -24,7 +26,9 @@ import { WalletModel } from 'src/wallet/infrastructure/persistence/models/wallet
 					UserModel,
 					ProfileModel,
 					AssetModel,
-					WalletModel
+					WalletModel,
+					OrderModel,
+					PredictionModel
 				],
 				autoLoadEntities: true,
 			}),
