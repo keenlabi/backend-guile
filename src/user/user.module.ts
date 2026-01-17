@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModel } from './infrastructure/persistence/models/user.model';
 import { UserRepository } from './infrastructure/persistence/repositories/user.repository';
@@ -11,16 +11,31 @@ import { FindUserUseCase } from './application/usecases/find-user.usecase';
 import { GetTradersUseCase } from './application/usecases/get-traders.usecase';
 import { ProfileController } from './infrastructure/controllers/profile.controller';
 import { FindUserProfileUseCase } from './application/usecases/find-user-profile.usecase';
+import { AdminKycController } from './infrastructure/controllers/admin-kyc.controller';
+import { KycController } from './infrastructure/controllers/kyc.controller';
+import { SubmitKycUseCase } from './application/usecases/submit-kyc.usecase';
+import { GetPendingKycUseCase } from './application/usecases/get-pending-kyc.usecase';
+import { ReviewKycUseCase } from './application/usecases/review-kyc.usecase';
+import { KycRecordModel } from './infrastructure/persistence/models/kyc.model';
+import { ToggleManagedModeUseCase } from './application/usecases/toggle-managed-mode.usecase';
+import { WalletModule } from 'src/wallet/wallet.module';
 
 @Module({
 	imports: [
 		TypeOrmModule.forFeature([
 			UserModel,
-			ProfileModel
+			ProfileModel,
+			KycRecordModel
 		]),
 		TokenModule,
+		forwardRef(() => WalletModule)
 	],
-	controllers: [UserController, ProfileController],
+	controllers: [
+		UserController, 
+		ProfileController,
+		KycController,
+		AdminKycController
+	],
 	providers: [
 		{
 			// Repository
@@ -37,11 +52,15 @@ import { FindUserProfileUseCase } from './application/usecases/find-user-profile
 		RegisterUserUseCase,
 		FindUserProfileUseCase,
 		FindUserUseCase,
-		GetTradersUseCase
+		GetTradersUseCase,
+		SubmitKycUseCase,
+    	GetPendingKycUseCase,
+    	ReviewKycUseCase,
+		ToggleManagedModeUseCase
 	],
 	exports: [
 		'IUserRepository',
-		'IProfileRepository'
+		'IProfileRepository',
 	],
 })
 

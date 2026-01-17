@@ -6,6 +6,7 @@ import { AssetModel } from '../../../asset/infrastructure/persistence/models/ass
 import { TransactionModel } from '../../../wallet/infrastructure/persistence/models/transaction.model';
 import { OrderModel } from '../../../order/infrastructure/models/order.model';
 import { PredictionModel } from '../../../prediction/infrastructure/persistence/models/prediction.model';
+import { KycRecordModel } from '../../../user/infrastructure/persistence/models/kyc.model';
 
 
 export const AppDataSource = new DataSource({
@@ -24,7 +25,8 @@ export const AppDataSource = new DataSource({
 		WalletModel,
 		TransactionModel,
 		OrderModel,
-		PredictionModel
+		PredictionModel,
+		KycRecordModel
 	],
 	migrations: ['src/shared/infrastructure/database/migrations/*.ts'],
 	migrationsTableName: 'migrations',

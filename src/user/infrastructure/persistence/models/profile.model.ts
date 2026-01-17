@@ -29,6 +29,9 @@ export class ProfileModel {
 	})
 	date_of_birth: Date;
 
+	@Column({ name: 'is_managed', default: false })
+    is_managed: boolean;
+
 	@Column({
 		name: 'created_at',
 		type: 'timestamp',

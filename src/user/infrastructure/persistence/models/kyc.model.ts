@@ -12,7 +12,8 @@ export class KycRecordModel {
   @PrimaryColumn('uuid')
   id: string;
 
-  @Column({ type: 'uuid', unique: true })
+  // FIX: Removed 'unique: true' (The OneToOne relation below already creates a unique index)
+  @Column({ type: 'uuid' }) 
   user_id: string;
 
   @OneToOne(() => UserModel)
@@ -26,31 +27,30 @@ export class KycRecordModel {
   last_name: string;
 
   @Column({ type: 'date' })
-  dob: string; // YYYY-MM-DD
+  dob: string;
 
   @Column()
   country: string;
 
-  // Storing File Paths (strings), not the files themselves
   @Column()
-  document_type: string; // 'PASSPORT', 'DRIVERS_LICENSE', 'ID_CARD'
+  document_type: string;
 
   @Column()
-  document_front_url: string; // Strictly required
+  document_front_url: string;
 
-  // CHANGE 1: Allow null here
-  @Column({ nullable: true })
-  document_back_url: string | null; 
+  // REQUIRED: Back to simple string
+  @Column() 
+  document_back_url: string; 
 
-  // CHANGE 2: Allow null here
-  @Column({ nullable: true })
-  selfie_url: string | null;         
+  // REQUIRED: Back to simple string
+  @Column()
+  selfie_url: string;         
 
   @Column({ type: 'enum', enum: KycStatus, default: KycStatus.PENDING })
   status: KycStatus;
 
-  // CHANGE 3: Allow null here
-  @Column({ nullable: true })
+  // Rejection reason remains nullable (it's empty until rejected)
+  @Column({ type: 'text', nullable: true })
   rejection_reason: string | null;
 
   @CreateDateColumn({ name: 'created_at' })

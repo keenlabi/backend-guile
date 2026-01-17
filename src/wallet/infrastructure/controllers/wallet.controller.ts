@@ -10,6 +10,8 @@ import { GetPendingWithdrawalsUseCase } from 'src/wallet/application/usecases/ge
 import { ProcessWithdrawalUseCase } from 'src/wallet/application/usecases/process-withdrawal.usecase';
 import { GetMyTransactionsUseCase } from 'src/wallet/application/usecases/get-my-transactions.usecase';
 import { CurrentUserPayload } from 'src/shared/types/express/auth';
+import { WithdrawRequestDto } from './dtos/withdraw-request.dto';
+import { RequestWithdrawalUseCase } from 'src/wallet/application/usecases/request-withdrawal.usecase';
 
 @Controller('wallets')
 @UseGuards(JwtAuthGuard)
@@ -21,6 +23,7 @@ export class WalletController {
     private readonly getPendingWithdrawalsUseCase: GetPendingWithdrawalsUseCase,
     private readonly processWithdrawalUseCase: ProcessWithdrawalUseCase,
     private readonly getMyTransactionsUseCase: GetMyTransactionsUseCase,
+    private readonly requestWithdrawalUseCase: RequestWithdrawalUseCase
   ) {}
 
   @Get('transactions')
@@ -43,6 +46,18 @@ export class WalletController {
   @Post('debit')
   async debit(@Req() req: express.Request, @Body() dto: AdminWalletActionDto) {
     return await this.debitWalletUseCase.execute(dto.userId, dto.symbol, dto.amountUsd, dto.recipientAddress!);
+  }
+
+  @Post('withdraw')
+  async requestWithdrawal(@Req() req: any, @Body() dto: WithdrawRequestDto) {
+    const user = req.user as CurrentUserPayload;
+    
+    return await this.requestWithdrawalUseCase.execute(
+      user.userId,
+      dto.symbol,
+      dto.amountUsd,
+      dto.destinationAddress
+    );
   }
 
   @Get('withdrawals/pending')

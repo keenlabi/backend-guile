@@ -3,6 +3,7 @@ import { PredictionRepository } from '../../infrastructure/persistence/repositor
 import * as walletRepositoryInterface from 'src/wallet/domain/repositories/wallet.repository.interface';
 import { CryptoRateService } from 'src/wallet/infrastructure/services/crypto-rate.service';
 import { Prediction, PredictionDirection } from '../../domain/entities/prediction.entity';
+import * as profileRepositoryInterface from 'src/user/domain/repositories/profile.repository.interface';
 
 @Injectable()
 export class PlacePredictionUseCase {
@@ -10,9 +11,18 @@ export class PlacePredictionUseCase {
     private readonly predictionRepository: PredictionRepository,
     @Inject('IWalletRepository') private readonly walletRepository: walletRepositoryInterface.IWalletRepository,
     private readonly cryptoRateService: CryptoRateService,
+    @Inject('IProfileRepository') 
+    private readonly profileRepository: profileRepositoryInterface.IProfileRepository,
   ) {}
 
-  async execute(userId: string, symbol: string, direction: string, amount: number, durationSeconds: number) {
+  async execute(userId: string, symbol: string, direction: string, amount: number, durationSeconds: number, isSystemOverride = false) {
+    if (!isSystemOverride) {
+        const profile = await this.profileRepository.findByUserId(userId);
+        if (profile && profile.isManaged) {
+            throw new BadRequestException('Account is under AI management. Manual trading is disabled.');
+        }
+    }
+
     const cleanSymbol = symbol.toUpperCase();
     
     // 1. Check Balance

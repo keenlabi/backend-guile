@@ -9,4 +9,5 @@ export class UserGeneralProfileDto {
   // Profile fields
   firstName: string | null;
   lastName: string | null;
+  isManaged: boolean;
 }

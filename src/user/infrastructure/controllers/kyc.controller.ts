@@ -19,7 +19,7 @@ export class KycController {
   async submit(
     @Req() req: any,
     @Body() dto: SubmitKycDto,
-    @UploadedFiles() files: { documentFront?: Express.Multer.File[], documentBack?: Express.Multer.File[], selfie?: Express.Multer.File[] }
+    @UploadedFiles() files: { documentFront: Express.Multer.File[], documentBack: Express.Multer.File[], selfie: Express.Multer.File[] }
   ) {
     // Map the incoming file field names to what the usecase expects
     const fileMap = {

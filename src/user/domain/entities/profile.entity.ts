@@ -3,6 +3,7 @@ export class ProfileUser {
 	passwordHash: string;
 	role: string;
 	status: string;
+	isManaged: boolean;
 	emailVerified: boolean;
 	createdAt: Date;
 }
@@ -13,6 +14,7 @@ export class Profile {
 	public readonly firstName: string | null;
 	public readonly lastName: string | null;
 	public readonly nickname: string | null;
+	public readonly isManaged: boolean;
 	public readonly createdAt?: Date;
 	public readonly updatedAt?: Date;
 	public readonly user?: ProfileUser | null;
@@ -23,6 +25,7 @@ export class Profile {
 		firstName: string | null,
 		lastName: string | null,
 		nickname: string | null,
+		isManaged: boolean = false,
 		createdAt?: Date,
 		updatedAt?: Date,
 		user?: ProfileUser | null,
@@ -35,6 +38,7 @@ export class Profile {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.nickname = nickname;
+		this.isManaged = isManaged;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.user = user;
@@ -61,6 +65,7 @@ export class Profile {
 		firstName: string | null,
 		lastName: string | null,
 		nickname: string | null,
+		isManaged: boolean,
 		createdAt?: Date,
 		updatedAt?: Date,
 		user?: ProfileUser | null,
@@ -71,6 +76,7 @@ export class Profile {
 			firstName,
 			lastName,
 			nickname,
+			isManaged,
 			createdAt,
 			updatedAt,
 			user

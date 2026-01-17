@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheModule } from '@nestjs/cache-manager';
 
@@ -19,6 +19,7 @@ import { MarketModule } from 'src/market/market.module';
 import { GetPendingWithdrawalsUseCase } from './application/usecases/get-pending-withdrawals.usecase';
 import { ProcessWithdrawalUseCase } from './application/usecases/process-withdrawal.usecase';
 import { GetMyTransactionsUseCase } from './application/usecases/get-my-transactions.usecase';
+import { RequestWithdrawalUseCase } from './application/usecases/request-withdrawal.usecase';
 
 @Module({
   imports: [
@@ -33,7 +34,7 @@ import { GetMyTransactionsUseCase } from './application/usecases/get-my-transact
     
     TokenModule,
     AssetModule,
-    UserModule,
+    forwardRef(() => UserModule),
     MarketModule,
   ],
   controllers: [WalletController],
@@ -45,6 +46,7 @@ import { GetMyTransactionsUseCase } from './application/usecases/get-my-transact
     GetPendingWithdrawalsUseCase,
     ProcessWithdrawalUseCase,
     GetMyTransactionsUseCase,
+    RequestWithdrawalUseCase,
 
     {
       provide: 'IWalletRepository',

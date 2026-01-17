@@ -80,6 +80,7 @@ export class ProfileRepository implements IProfileRepository {
 			model.first_name,
 			model.last_name,
 			model.nickname,
+			model.is_managed,
 			model.created_at,
 			model.updated_at,
 			userDomain
@@ -91,6 +92,7 @@ export class ProfileRepository implements IProfileRepository {
 		model.id = entity.id;
 		model.user_id = entity.userId;
 		// Map nulls correctly
+		model.is_managed = entity.isManaged;
 		model.first_name = entity.firstName as string; 
 		model.last_name = entity.lastName as string;
 		model.nickname = entity.nickname as string;

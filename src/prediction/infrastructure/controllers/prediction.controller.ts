@@ -42,7 +42,6 @@ export class PredictionController {
   // ADMIN ONLY (Add RolesGuard here in production)
   @Put(':id/resolve')
   async resolve(@Param('id') id: string, @Body() dto: ResolvePredictionDto) {
-    console.log(dto)
     return this.resolvePredictionUseCase.execute(id, dto.outcome, null, null, dto.payout);
   }
 

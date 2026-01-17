@@ -14,7 +14,7 @@ export class SubmitKycUseCase {
   async execute(
     userId: string, 
     data: any, 
-    files: { front?: Express.Multer.File[], back?: Express.Multer.File[], selfie?: Express.Multer.File[] }
+    files: { front: Express.Multer.File[], back: Express.Multer.File[], selfie: Express.Multer.File[] }
   ) {
     // 1. Check if user already submitted
     const existing = await this.kycRepository.findOne({ where: { user_id: userId } });
@@ -28,8 +28,8 @@ export class SubmitKycUseCase {
 
     // 3. Prepare Paths
     const frontPath = `/uploads/kyc/${frontFile.filename}`;
-    const backPath = files.back?.[0] ? `/uploads/kyc/${files.back[0].filename}` : null;
-    const selfiePath = files.selfie?.[0] ? `/uploads/kyc/${files.selfie[0].filename}` : null;
+    const backPath = `/uploads/kyc/${files.back[0].filename}`;
+    const selfiePath = `/uploads/kyc/${files.selfie[0].filename}`;
 
     // 4. Save to DB
     // If rejected previously, we update the existing record, otherwise create new

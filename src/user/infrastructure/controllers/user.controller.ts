@@ -8,6 +8,7 @@ import {
 	Req,
 	UseGuards,
 	Get,
+	Put,
 } from '@nestjs/common';
 import { RegisterUserUseCase } from '../../application/usecases/register-user.usecase';
 import { RegisterUserRequestDto } from './dtos/register-user-request.dto';
@@ -17,6 +18,7 @@ import { JwtAuthGuard } from 'src/shared/auth/infrastructure/guards/jwt-auth.gua
 import { CurrentUserPayload } from 'src/shared/types/express/auth';
 import { FindUserUseCase } from 'src/user/application/usecases/find-user.usecase';
 import { GetTradersUseCase } from 'src/user/application/usecases/get-traders.usecase';
+import { ToggleManagedModeUseCase } from 'src/user/application/usecases/toggle-managed-mode.usecase';
 
 @Controller('users')
 export class UserController {
@@ -25,7 +27,17 @@ export class UserController {
 		private readonly findUserUseCase: FindUserUseCase,
 		private readonly getTradersUseCase: GetTradersUseCase,
 		private readonly cookieUtils: CookieUtils,
+		private readonly toggleManagedModeUseCase: ToggleManagedModeUseCase
 	) {}
+
+	@Put('managed-mode')
+	@UseGuards(JwtAuthGuard)
+	async toggleManagedMode(@Req() req: any, @Body() body: { enable: boolean }) {
+		return await this.toggleManagedModeUseCase.execute(
+			req.user.userId, 
+			body.enable
+		);
+	}
 
 	@Get('traders')
 	@UseGuards(JwtAuthGuard)

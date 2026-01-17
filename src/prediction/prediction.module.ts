@@ -11,6 +11,8 @@ import { TokenModule } from 'src/shared/auth/token.module';
 import { GetPredictionsUseCase } from './application/usecases/get-predictions.usecase';
 import { GetPendingPredictionsUseCase } from './application/usecases/get-pending-predictions.usecase';
 import { ClosePredictionUseCase } from './application/usecases/close-prediction.usecase';
+import { UserModule } from 'src/user/user.module'; // <--- 1. Import UserModule
+import { ToggleManagedModeUseCase } from 'src/user/application/usecases/toggle-managed-mode.usecase';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { ClosePredictionUseCase } from './application/usecases/close-prediction.
     WalletModule,
     MarketModule,
     TokenModule,
+    UserModule,
   ],
   controllers: [PredictionController],
   providers: [
@@ -26,7 +29,8 @@ import { ClosePredictionUseCase } from './application/usecases/close-prediction.
     ResolvePredictionUseCase,
     GetPredictionsUseCase,
     GetPendingPredictionsUseCase,
-    ClosePredictionUseCase
+    ClosePredictionUseCase,
+    ToggleManagedModeUseCase
   ],
 })
 export class PredictionModule {}

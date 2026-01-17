@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AssetModel } from 'src/asset/infrastructure/persistence/models/asset.model';
 import { OrderModel } from 'src/order/infrastructure/models/order.model';
 import { PredictionModel } from 'src/prediction/infrastructure/persistence/models/prediction.model';
+import { KycRecordModel } from 'src/user/infrastructure/persistence/models/kyc.model';
 import { ProfileModel } from 'src/user/infrastructure/persistence/models/profile.model';
 import { UserModel } from 'src/user/infrastructure/persistence/models/user.model';
 import { WalletModel } from 'src/wallet/infrastructure/persistence/models/wallet.model';
@@ -28,7 +29,8 @@ import { WalletModel } from 'src/wallet/infrastructure/persistence/models/wallet
 					AssetModel,
 					WalletModel,
 					OrderModel,
-					PredictionModel
+					PredictionModel,
+					KycRecordModel
 				],
 				autoLoadEntities: true,
 			}),

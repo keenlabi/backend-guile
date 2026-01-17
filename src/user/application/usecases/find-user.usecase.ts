@@ -30,7 +30,8 @@ export class FindUserUseCase {
       createdAt: user.createdAt,
       
       firstName: profile?.firstName ?? null,
-      lastName: profile?.lastName ?? null
+      lastName: profile?.lastName ?? null,
+      isManaged: profile?.isManaged ?? false,
     };
   }
 }
