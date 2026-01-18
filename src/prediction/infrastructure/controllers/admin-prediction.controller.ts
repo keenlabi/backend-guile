@@ -1,11 +1,12 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/shared/auth/infrastructure/guards/jwt-auth.guard';
 
 import { PlacePredictionUseCase } from '../../application/usecases/place-prediction.usecase';
 import { CreatePredictionDto } from './dtos/create-prediction.dto';
+import { GetPredictionsUseCase } from 'src/prediction/application/usecases/get-predictions.usecase';
 
 export class AdminPlacePredictionDto extends CreatePredictionDto {
-    userId: string; // Admin specifies the target user
+  userId: string;
 }
 
 @Controller('admin/predictions')
@@ -13,7 +14,14 @@ export class AdminPlacePredictionDto extends CreatePredictionDto {
 export class AdminPredictionController {
   constructor(
     private readonly placePredictionUseCase: PlacePredictionUseCase,
+    private readonly getPredictionsUseCase: GetPredictionsUseCase
   ) {}
+
+  @Get('user/:userId')
+  async getByUserId(@Param('userId') userId: string) {
+    const data = await this.getPredictionsUseCase.execute(userId);
+    return data;
+  }
 
   @Post('place')
   async placeForUser(@Body() dto: AdminPlacePredictionDto) {

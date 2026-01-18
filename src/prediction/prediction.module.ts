@@ -13,6 +13,7 @@ import { GetPendingPredictionsUseCase } from './application/usecases/get-pending
 import { ClosePredictionUseCase } from './application/usecases/close-prediction.usecase';
 import { UserModule } from 'src/user/user.module'; // <--- 1. Import UserModule
 import { ToggleManagedModeUseCase } from 'src/user/application/usecases/toggle-managed-mode.usecase';
+import { AdminPredictionController } from './infrastructure/controllers/admin-prediction.controller';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { ToggleManagedModeUseCase } from 'src/user/application/usecases/toggle-m
     TokenModule,
     UserModule,
   ],
-  controllers: [PredictionController],
+  controllers: [PredictionController, AdminPredictionController],
   providers: [
     PredictionRepository,
     PlacePredictionUseCase,

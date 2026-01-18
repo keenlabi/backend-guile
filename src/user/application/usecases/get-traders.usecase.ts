@@ -18,6 +18,7 @@ export class GetTradersUseCase {
       role: profile.user?.role,
       status: profile.user?.status,
       createdAt: profile.user?.createdAt,
+      isManaged: profile.isManaged,
       profileCreatedAt: profile.createdAt,
       firstName: profile.firstName,
       lastName: profile.lastName,
