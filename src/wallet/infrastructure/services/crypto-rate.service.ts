@@ -7,7 +7,7 @@ export class CryptoRateService {
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
   // Expanded map to cover common test cases
-  private readonly symbolMap: Record<string, string> = {
+private readonly symbolMap: Record<string, string> = {
     BTC: 'bitcoin',
     ETH: 'ethereum',
     SOL: 'solana',
@@ -20,6 +20,8 @@ export class CryptoRateService {
     TRX: 'tron',
     MATIC: 'matic-network',
     LTC: 'litecoin',
+    // Commodities
+    XAU: 'pax-gold',
     // Stablecoins
     USDT: 'tether',
     USDC: 'usd-coin',

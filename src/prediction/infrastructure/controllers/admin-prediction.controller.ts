@@ -4,8 +4,10 @@ import { JwtAuthGuard } from 'src/shared/auth/infrastructure/guards/jwt-auth.gua
 import { PlacePredictionUseCase } from '../../application/usecases/place-prediction.usecase';
 import { CreatePredictionDto } from './dtos/create-prediction.dto';
 import { GetPredictionsUseCase } from 'src/prediction/application/usecases/get-predictions.usecase';
+import { IsString } from 'class-validator';
 
 export class AdminPlacePredictionDto extends CreatePredictionDto {
+  @IsString()
   userId: string;
 }
 

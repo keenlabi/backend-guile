@@ -35,6 +35,7 @@ export class PlacePredictionUseCase {
 
     // 2. Get Real-time Open Price (System of Record)
     const openPrice = await this.cryptoRateService.getRateInUsd(cleanSymbol);
+    console.log(openPrice)
     if (!openPrice) throw new BadRequestException('Asset price unavailable');
 
     // 3. Debit Investment (Lock Funds)
