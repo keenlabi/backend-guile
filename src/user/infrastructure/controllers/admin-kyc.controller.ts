@@ -18,8 +18,7 @@ export class AdminKycController {
 
   @Get('pending')
   async getPending() {
-    const data = await this.getPendingKycUseCase.execute();
-    return { data };
+    return await this.getPendingKycUseCase.execute();
   }
 
   @Put(':id/review')

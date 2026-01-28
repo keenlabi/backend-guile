@@ -12,7 +12,6 @@ export class KycRecordModel {
   @PrimaryColumn('uuid')
   id: string;
 
-  // FIX: Removed 'unique: true' (The OneToOne relation below already creates a unique index)
   @Column({ type: 'uuid' }) 
   user_id: string;
 
@@ -38,18 +37,17 @@ export class KycRecordModel {
   @Column()
   document_front_url: string;
 
-  // REQUIRED: Back to simple string
-  @Column() 
-  document_back_url: string; 
+  // --- FIX IS HERE ---
+  // We added `type: 'text'` so TypeORM knows exactly what SQL type to use
+  @Column({ type: 'text', nullable: true }) 
+  document_back_url: string | null; 
 
-  // REQUIRED: Back to simple string
   @Column()
   selfie_url: string;         
 
   @Column({ type: 'enum', enum: KycStatus, default: KycStatus.PENDING })
   status: KycStatus;
 
-  // Rejection reason remains nullable (it's empty until rejected)
   @Column({ type: 'text', nullable: true })
   rejection_reason: string | null;
 

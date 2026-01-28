@@ -19,6 +19,7 @@ import { ReviewKycUseCase } from './application/usecases/review-kyc.usecase';
 import { KycRecordModel } from './infrastructure/persistence/models/kyc.model';
 import { ToggleManagedModeUseCase } from './application/usecases/toggle-managed-mode.usecase';
 import { WalletModule } from 'src/wallet/wallet.module';
+import { GetKycStatusUseCase } from './application/usecases/get-kyc-status.usecase';
 
 @Module({
 	imports: [
@@ -56,7 +57,8 @@ import { WalletModule } from 'src/wallet/wallet.module';
 		SubmitKycUseCase,
     	GetPendingKycUseCase,
     	ReviewKycUseCase,
-		ToggleManagedModeUseCase
+		ToggleManagedModeUseCase,
+		GetKycStatusUseCase
 	],
 	exports: [
 		'IUserRepository',
