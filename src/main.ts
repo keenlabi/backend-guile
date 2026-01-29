@@ -13,7 +13,18 @@ import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.enableCors();
+  app.enableCors({
+    origin: [
+      'http://lumexvip.com',
+      'https://lumexvip.com',
+      'http://www.lumexvip.com',
+      'https://www.lumexvip.com',
+      'http://localhost:5173', // Keep for local dev
+      'http://localhost:3000'
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // <--- CRITICAL for Auth to work
+  });
   // 	app.enableCors({
   // 	// origin: "*",
   // 	// credentials: true,

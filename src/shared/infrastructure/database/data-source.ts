@@ -1,3 +1,5 @@
+import { config } from 'dotenv';
+config({ path: '.env.development' });
 import { DataSource } from 'typeorm';
 import { UserModel } from '../../../user/infrastructure/persistence/models/user.model';
 import { ProfileModel } from '../../../user/infrastructure/persistence/models/profile.model';
@@ -13,9 +15,9 @@ export const AppDataSource = new DataSource({
 	type: 'postgres',
 	host: process.env.DATABASE_HOST || 'localhost',
 	port: parseInt(process.env.DATABASE_PORT || '5432', 10),
-	username: process.env.DATABASE_USER || 'keenlabi',
+	username: process.env.DATABASE_USER,
 	password: process.env.DATABASE_PASSWORD,
-	database: process.env.DATABASE_NAME || 'guile',
+	database: process.env.DATABASE_NAME,
 	synchronize: false,
 	// logging: process.env.NODE_ENV === 'development',
 	entities: [
