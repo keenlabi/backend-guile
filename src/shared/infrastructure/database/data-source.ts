@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-config({ path: '.env.development' });
+config({ path: `.env.${process.env.NODE_ENV || 'development'}` });
 import { DataSource } from 'typeorm';
 import { UserModel } from '../../../user/infrastructure/persistence/models/user.model';
 import { ProfileModel } from '../../../user/infrastructure/persistence/models/profile.model';
